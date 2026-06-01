@@ -5,210 +5,484 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>稳定币立法三件套（GENIUS + CLARITY + MiCA）对DeFi生态的结构性影响</title>
     <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg: #0d1117;
-            --card-bg: #161b22;
-            --text: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #58a6ff;
-            --accent-green: #3fb950;
-            --border: #30363d;
-            --highlight-bg: #1c2333;
+            --bg: #f8fafc;
+            --bg2: #f1f5f9;
+            --bg3: #e2e8f0;
+            --border: #cbd5e1;
+            --text: #0f172a;
+            --text2: #334155;
+            --text3: #64748b;
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --gold: #d97706;
+            --gold-light: #fef3c7;
+            --tag-bg: #e0f2fe;
+            --tag-text: #0369a1;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", sans-serif;
+            --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', Helvetica, Arial, sans-serif;
+            font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.75;
+            line-height: 1.8;
             font-size: 16px;
         }
-        .header {
-            background: linear-gradient(135deg, #1a1e2e 0%, #0d1117 100%);
+
+        /* ── Nav Bar ── */
+        .nav-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(248,250,252,0.92);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            padding: 3rem 0 2rem;
-            text-align: center;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            line-height: 1.3;
-        }
-        .header .subtitle {
+        .nav-brand {
+            font-size: .85em; font-weight: 700;
             color: var(--accent);
-            font-size: 1.1rem;
-            margin-top: 0.75rem;
-            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: .5px;
         }
-        .header .meta {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 1rem;
+        .nav-brand:hover { opacity: .8; }
+        .nav-links-list {
+            display: flex; gap: 20px; list-style: none;
         }
-        .header .meta span {
-            margin: 0 0.5rem;
+        .nav-links-list a {
+            font-size: .82em; color: var(--text3);
+            text-decoration: none; transition: color .2s;
         }
-        .header .tags {
-            margin-top: 1rem;
-        }
-        .header .tags span {
-            display: inline-block;
-            background: rgba(88, 166, 255, 0.15);
-            color: var(--accent);
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            margin: 0.25rem;
-        }
-        .container {
-            max-width: 820px;
+        .nav-links-list a:hover { color: var(--accent); }
+
+        /* ── Article Wrapper ── */
+        .article-wrap {
+            max-width: 780px;
             margin: 0 auto;
-            padding: 2rem 2rem 4rem;
+            padding: 48px 24px 80px;
         }
+
+        /* ── Article Header ── */
+        .article-header {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 2px solid var(--border);
+        }
+        .article-tags {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-bottom: 16px;
+        }
+        .tag {
+            font-size: .72em; font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            letter-spacing: .3px;
+        }
+        .tag.gold {
+            background: var(--gold-light);
+            color: var(--gold);
+        }
+        .article-title {
+            font-size: 2em; font-weight: 800;
+            line-height: 1.3; color: var(--text);
+            margin-bottom: 12px;
+            letter-spacing: -.3px;
+        }
+        .article-subtitle {
+            font-size: 1.05em; color: var(--text3);
+            margin-bottom: 20px; line-height: 1.6;
+        }
+        .article-meta {
+            display: flex; flex-wrap: wrap; align-items: center;
+            gap: 16px; font-size: .8em; color: var(--text3);
+        }
+        .meta-author {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .author-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: .7em; font-weight: 700;
+        }
+        .meta-sep { color: var(--border); }
+
+        /* ── Lead Block ── */
+        .lead-block {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 18px 22px;
+            margin: 32px 0;
+            font-size: .95em;
+            color: var(--text2);
+            line-height: 1.75;
+        }
+        .lead-block .cite {
+            display: block; margin-top: 10px;
+            font-size: .82em; color: var(--text3);
+        }
+        .lead-block .cite a {
+            color: var(--accent); text-decoration: none;
+        }
+        .lead-block .cite a:hover { text-decoration: underline; }
+
+        /* ── Body Typography ── */
         .article-body h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.35em; font-weight: 700;
             color: var(--text);
-            margin: 2.5rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
+            margin: 44px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-light);
+            position: relative;
+        }
+        .article-body h2::before {
+            content: '';
+            position: absolute; bottom: -2px; left: 0;
+            width: 48px; height: 2px;
+            background: var(--accent);
         }
         .article-body h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.08em; font-weight: 700;
             color: var(--text);
-            margin: 2rem 0 0.75rem;
+            margin: 28px 0 10px;
         }
         .article-body h4 {
-            font-size: 1.05rem;
-            font-weight: 600;
+            font-size: .95em; font-weight: 700;
             color: var(--accent);
-            margin: 1.5rem 0 0.5rem;
+            margin: 22px 0 8px;
         }
         .article-body p {
-            margin: 0.75rem 0;
-            color: var(--text);
+            margin-bottom: 18px;
+            color: var(--text2);
+            line-height: 1.85;
+        }
+        .article-body p:first-of-type {
+            font-size: 1.05em;
         }
         .article-body strong {
-            color: #f0f6fc;
+            color: var(--text);
             font-weight: 600;
         }
         .article-body em {
-            color: var(--text-secondary);
-        }
-        .article-body blockquote {
-            border-left: 3px solid var(--accent);
-            padding: 0.75rem 1.25rem;
-            margin: 1.25rem 0;
-            background: var(--highlight-bg);
-            border-radius: 0 6px 6px 0;
-            color: var(--text-secondary);
-        }
-        .article-body ul, .article-body ol {
-            margin: 0.75rem 0;
-            padding-left: 1.5rem;
-        }
-        .article-body li {
-            margin: 0.4rem 0;
-        }
-        .article-body table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.25rem 0;
-            font-size: 0.92rem;
-        }
-        .article-body th {
-            background: var(--highlight-bg);
-            padding: 0.65rem 0.85rem;
-            text-align: left;
-            border: 1px solid var(--border);
-            font-weight: 600;
-            color: var(--accent);
-        }
-        .article-body td {
-            padding: 0.6rem 0.85rem;
-            border: 1px solid var(--border);
-        }
-        .article-body tr:hover {
-            background: rgba(88, 166, 255, 0.04);
-        }
-        .article-body hr {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 2rem 0;
-        }
-        .article-body code {
-            background: var(--highlight-bg);
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--accent);
+            color: var(--text3);
         }
         .article-body a {
             color: var(--accent);
             text-decoration: none;
         }
-        .article-body a:hover {
-            text-decoration: underline;
+        .article-body a:hover { text-decoration: underline; }
+
+        /* ── Tables ── */
+        .article-body table, .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0 32px;
+            font-size: .88em;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
         }
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            margin-top: 2rem;
+        .article-body thead, .compare-table thead {
+            background: linear-gradient(135deg, #1e40af, #3730a3);
+            color: #fff;
         }
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
+        .article-body thead th, .compare-table thead th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: .3px;
         }
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
+        .article-body tbody tr:nth-child(odd), .compare-table tbody tr:nth-child(odd) {
+            background: var(--bg2);
         }
-        .nav-links a {
-            display: inline-block;
-            background: rgba(88, 166, 255, 0.1);
-            color: var(--accent);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            text-decoration: none;
-            border: 1px solid rgba(88, 166, 255, 0.2);
-            transition: all 0.2s;
+        .article-body tbody tr:nth-child(even), .compare-table tbody tr:nth-child(even) {
+            background: #fff;
         }
-        .nav-links a:hover {
-            background: rgba(88, 166, 255, 0.2);
+        .article-body tbody tr:hover, .compare-table tbody tr:hover {
+            background: var(--accent-light);
+        }
+        .article-body td, .compare-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text2);
+        }
+        .article-body td:first-child, .compare-table td:first-child {
+            font-weight: 600; color: var(--text);
+        }
+        .hl-good { color: #059669; font-weight: 600; }
+        .hl-neutral { color: var(--gold); font-weight: 600; }
+
+        /* ── Lists ── */
+        .article-body ul, .article-body ol {
+            margin: 16px 0;
+            padding-left: 1.6rem;
+            color: var(--text2);
+        }
+        .article-body li {
+            margin: 6px 0;
+            line-height: 1.7;
+        }
+
+        /* ── Blockquote ── */
+        .article-body blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 14px 20px;
+            margin: 24px 0;
+            background: var(--accent-light);
+            border-radius: 0 8px 8px 0;
+            color: var(--text2);
+            font-style: italic;
+        }
+
+        /* ── Highlight Box ── */
+        .highlight-box {
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 28px 0;
+        }
+        .highlight-box h4 {
+            font-size: .9em; font-weight: 700;
+            color: #4338ca;
+            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .highlight-box ul {
+            list-style: none;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .highlight-box ul li {
+            font-size: .88em; color: var(--text2);
+            padding-left: 18px; position: relative;
+            line-height: 1.6;
+        }
+        .highlight-box ul li::before {
+            content: '▸';
+            position: absolute; left: 0;
+            color: #6366f1; font-size: .8em; top: 2px;
+        }
+
+        /* ── Feature Cards Grid ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 24px 0 32px;
+        }
+        .feature-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .feature-card:hover {
             border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(37,99,235,.1);
         }
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.5rem; }
-            .container { padding: 1.25rem; }
-            .article-body table { font-size: 0.82rem; }
-            .article-body th, .article-body td { padding: 0.4rem 0.5rem; }
+        .feature-icon {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+        .feature-name {
+            font-size: .88em; font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .feature-desc {
+            font-size: .8em; color: var(--text3);
+            line-height: 1.6;
+        }
+
+        /* ── Protocol Map Grid ── */
+        .protocol-map {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 28px 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .protocol-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+        .protocol-name {
+            font-size: .85em; font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+            font-family: var(--font-mono);
+        }
+        .protocol-role {
+            font-size: .78em; color: var(--text3);
+            line-height: 1.5;
+        }
+        .protocol-item.highlight-protocol {
+            border-color: #059669;
+            background: #ecfdf5;
+            box-shadow: 0 2px 8px rgba(5,150,105,.12);
+        }
+        .protocol-item.highlight-protocol .protocol-name {
+            color: #047857;
+        }
+        .protocol-item.highlight-protocol .protocol-role {
+            color: #065f46;
+        }
+
+        /* ── Horizontal Rule ── */
+        .article-body hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 36px 0;
+        }
+
+        /* ── Code ── */
+        .article-body code {
+            background: var(--bg2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: .88em;
+            font-family: var(--font-mono);
+            color: #4338ca;
+        }
+
+        /* ── Sources Section ── */
+        .sources-section {
+            margin-top: 56px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+        .sources-section h3 {
+            font-size: .9em; font-weight: 700;
+            color: var(--text3);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+        .sources-list {
+            list-style: none;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .sources-list li {
+            display: flex; gap: 10px; align-items: flex-start;
+        }
+        .source-num {
+            min-width: 22px; height: 22px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .7em; font-weight: 700;
+            margin-top: 1px; flex-shrink: 0;
+        }
+        .source-content {
+            font-size: .82em; color: var(--text3);
+            line-height: 1.6;
+        }
+        .source-content a {
+            color: var(--accent); text-decoration: none;
+            word-break: break-all;
+        }
+        .source-content a:hover { text-decoration: underline; }
+
+        /* ── Cross-nav ── */
+        .cross-nav {
+            display: flex; gap: 12px; justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+        .cross-nav a {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: .84em;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all .2s;
+        }
+        .cross-nav a:hover {
+            border-color: var(--accent);
+            background: #fff;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 28px 24px;
+            border-top: 1px solid var(--border);
+            font-size: .78em; color: var(--text3);
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        footer a:hover { text-decoration: underline; }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .article-title { font-size: 1.5em; }
+            .article-wrap { padding: 32px 16px 60px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .protocol-map { grid-template-columns: 1fr; }
+            .article-body table, .compare-table { font-size: .78em; }
+            .article-body table th, .article-body table td,
+            .compare-table th, .compare-table td
+            { padding: 8px 10px; }
+            .nav-bar { padding: 10px 16px; }
+            .nav-links-list { gap: 12px; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>稳定币立法三件套（GENIUS + CLARITY + MiCA）对DeFi生态的结构性影响</h1>
-        <div class="subtitle">当三部法案同期推进，DeFi的价值分配逻辑正在被重写</div>
-        <div class="meta">
-            <span>鉴叔</span>·<span>2026年5月28日</span>·<span>约 6,000 字 · 阅读约 20 分钟</span>
-        </div>
-        <div class="tags">
-            <span>稳定币</span><span>DeFi</span><span>GENIUS法案</span><span>CLARITY法案</span><span>MiCA</span><span>深度分析</span>
-        </div>
-    </div>
-    <div class="container">
+    <!-- ── Nav Bar ── -->
+    <nav class="nav-bar">
+        <a class="nav-brand" href="https://julietwang123.github.io/erc8211-analysis/">⛓ BlockChain 研报</a>
+        <ul class="nav-links-list">
+            <li><a href="https://julietwang123.github.io/blockchain-2025-report/">年度报告</a></li>
+            <li><a href="https://julietwang123.github.io/stablecoin-legislation-defi/">稳定币立法</a></li>
+            <li><a href="https://julietwang123.github.io/stablecoin-chain-competition/">公链竞争</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── Article Wrapper ── -->
+    <div class="article-wrap">
+        <!-- Header -->
+        <header class="article-header">
+            <div class="article-tags">
+                <span class="tag">稳定币</span><span class="tag">DeFi</span><span class="tag">GENIUS法案</span><span class="tag">CLARITY法案</span><span class="tag">MiCA</span><span class="tag">深度分析</span>
+            </div>
+            <h1 class="article-title">稳定币立法三件套（GENIUS + CLARITY + MiCA）对DeFi生态的结构性影响</h1>
+            <p class="article-subtitle">当三部法案同期推进，DeFi的价值分配逻辑正在被重写</p>
+            <div class="article-meta">
+                <span class="meta-author">
+                    <span class="author-avatar">鉴</span>
+                    <strong>鉴叔</strong>
+                </span>
+                <span class="meta-sep">·</span>
+                <span>2026年5月28日</span>
+                <span class="meta-sep">·</span>
+                <span>约 6,000 字 · 阅读约 20 分钟</span>
+            </div>
+        </header>
+
+        <!-- Body -->
         <div class="article-body">
             <hr />
 <h2>第一部分：引言——三法案同步推进的历史坐标</h2>
@@ -217,7 +491,7 @@
 <p>据NCUA官方公告（2026年5月18日），美国国家信用合作社管理局（NCUA）主席Kyle Hauptman明确表态："该拟议规则旨在确保信用合作社在标准方面不处于劣势，并与银行子公司的拟议标准保持一致。"这句话的潜台词是：GENIUS法案正在将传统金融机构与加密原生机构置于同一竞技场，信用合作社不愿被排除在外。</p>
 <p>更值得关注的是Bitwise首席投资官（CIO）在2026年5月14日的判断："《GENIUS法案》已推动加密融资，《CLARITY法案》或成下一关键催化剂。"这一判断暗示了一个清晰的传导链条：立法确定性→资本信心恢复→融资活跃度提升→生态加速建设。</p>
 <p>本文将从协议机制层、资本流向层和监管博弈层三个维度，深度分析这"三法案同步推进"对DeFi生态的五大结构性影响，并推演其中的传导逻辑、受益方与风险点。</p>
-<p><strong>核心分析框架：</strong> 发行层（准入）→ 定义层（分类）→ 收益层（禁息传导）→ 应用层（DeFi重构）→ 竞争层（全球套利）。</p>
+<div class="lead-block"><strong>核心分析框架：</strong> 发行层（准入）→ 定义层（分类）→ 收益层（禁息传导）→ 应用层（DeFi重构）→ 竞争层（全球套利）。</div>
 <hr />
 <h2>第二部分：三法案机制深度拆解</h2>
 <h3>2.1 GENIUS法案：稳定币发行准入体系</h3>
@@ -406,16 +680,21 @@
 <hr />
 <hr />
         </div>
-        <div class="nav-links">
-            <a href="https://julietwang123.github.io/stablecoin-chain-competition/">📖 稳定币专用公链竞争</a>
-        </div>
+
+        <!-- Cross-Nav -->
+        <nav class="cross-nav"><a href="https://julietwang123.github.io/stablecoin-chain-competition/">📖 稳定币专用公链竞争</a></nav>
+
+        <!-- Sources -->
+        
     </div>
-    <div class="footer">
+
+    <!-- Footer -->
+    <footer>
         <p>© 2026 鉴叔 本文内容仅供研究参考，不构成投资建议</p>
-        <p style="margin-top:0.5rem">
+        <p style="margin-top:6px;">
             <a href="https://julietwang123.github.io/erc8211-analysis/">⛓ ERC-8211 研报</a> ·
             <a href="https://julietwang123.github.io/blockchain-2025-report/">📊 年度报告</a>
         </p>
-    </div>
+    </footer>
 </body>
 </html>
